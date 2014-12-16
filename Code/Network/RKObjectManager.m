@@ -69,10 +69,11 @@ static RKObjectManager  *sharedManager = nil;
 #ifdef RKCoreDataIncluded
 static NSArray *RKFilteredArrayOfResponseDescriptorsMatchingPathAndMethod(NSArray *responseDescriptors, NSString *path, RKRequestMethod method)
 {
-    NSIndexSet *indexSet = [responseDescriptors indexesOfObjectsPassingTest:^BOOL(RKResponseDescriptor *responseDescriptor, NSUInteger idx, BOOL *stop) {
+    NSArray * responseDescriptorsCopy = [responseDescriptors copy];
+    NSIndexSet *indexSet = [responseDescriptorsCopy indexesOfObjectsPassingTest:^BOOL(RKResponseDescriptor *responseDescriptor, NSUInteger idx, BOOL *stop) {
         return [responseDescriptor matchesPath:path] && (method & responseDescriptor.method);
     }];
-    return [responseDescriptors objectsAtIndexes:indexSet];
+    return [responseDescriptorsCopy objectsAtIndexes:indexSet];
 }
 #endif
 
