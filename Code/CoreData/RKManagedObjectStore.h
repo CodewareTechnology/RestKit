@@ -245,6 +245,7 @@
  */
 - (NSManagedObjectContext *)newChildManagedObjectContextWithConcurrencyType:(NSManagedObjectContextConcurrencyType)concurrencyType tracksChanges:(BOOL)tracksChanges;
 - (NSManagedObjectContext *)newChildManagedObjectContextWithConcurrencyType:(NSManagedObjectContextConcurrencyType)concurrencyType DEPRECATED_ATTRIBUTE; // invokes above with `tracksChanges:NO`
+- (NSManagedObjectContext *)newMainQueueChildManagedObjectContextWithConcurrencyType:(NSManagedObjectContextConcurrencyType)concurrencyType tracksChanges:(BOOL)tracksChanges;
 
 ///----------------------------
 /// @name Performing Migrations

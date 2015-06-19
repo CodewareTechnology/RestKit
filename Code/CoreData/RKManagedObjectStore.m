@@ -273,11 +273,21 @@ static char RKManagedObjectContextChangeMergingObserverAssociationKey;
     return YES;
 }
 
-- (NSManagedObjectContext *)newChildManagedObjectContextWithConcurrencyType:(NSManagedObjectContextConcurrencyType)concurrencyType tracksChanges:(BOOL)tracksChanges
+- (NSManagedObjectContext *)newMainQueueChildManagedObjectContextWithConcurrencyType:(NSManagedObjectContextConcurrencyType)concurrencyType tracksChanges:(BOOL)tracksChanges
+{
+    return [self newChildManagedObjectContextWithConcurrencyType:concurrencyType tracksChanges:tracksChanges parentContext:self.mainQueueManagedObjectContext];
+}
+
+    - (NSManagedObjectContext *)newChildManagedObjectContextWithConcurrencyType:(NSManagedObjectContextConcurrencyType)concurrencyType tracksChanges:(BOOL)tracksChanges
+{
+    return [self newChildManagedObjectContextWithConcurrencyType:concurrencyType tracksChanges:tracksChanges parentContext:self.persistentStoreManagedObjectContext];
+}
+
+- (NSManagedObjectContext *)newChildManagedObjectContextWithConcurrencyType:(NSManagedObjectContextConcurrencyType)concurrencyType tracksChanges:(BOOL)tracksChanges parentContext:(NSManagedObjectContext *)parentContext
 {
     NSManagedObjectContext *managedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:concurrencyType];
     [managedObjectContext performBlockAndWait:^{
-        managedObjectContext.parentContext = self.persistentStoreManagedObjectContext;
+        managedObjectContext.parentContext = parentContext;
         managedObjectContext.mergePolicy = NSMergeByPropertyStoreTrumpMergePolicy;
     }];
     
